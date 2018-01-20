@@ -1,15 +1,17 @@
 const mongo = require('mongodb');
-const objectId = mongo.ObjectID;
+// const objectId = mongo.ObjectID;
 const config = require('./config/config');
-const url = config.mongoUrl;
-
+const mongoose = require('mongoose');
+mongoose.connect(config.MONGO_URL, {
+    useNewUrlParser: true
+});
 const ROUTE = require('./endpoints');
 
 const AccountsController =
-    require('./controllers/AccountsController')(mongo, url, objectId);
+    require('./controllers/AccountsController')(mongoose);
 
-const ActivitiesController =
-    require('./controllers/ActivitiesController')(mongo, url, objectId);
+// const ActivitiesController =
+//     require('./controllers/ActivitiesController')(mongo, url, objectId);
 
 module.exports = (app) => {
     //#region AccountsController
@@ -18,19 +20,19 @@ module.exports = (app) => {
     //#endregion
 
     //#region ActivitiesController
-    app.post(ROUTE.ACTIVITIES_BY_ID,
-        ActivitiesController.GetActivityLogById)
+    // app.post(ROUTE.ACTIVITIES_BY_ID,
+    //     ActivitiesController.GetActivityLogById)
 
-    app.post(ROUTE.ACTIVITIES,
-        ActivitiesController.LogActivity);
+    // app.post(ROUTE.ACTIVITIES,
+    //     ActivitiesController.LogActivity);
 
-    app.put(ROUTE.ACTIVITIES,
-        ActivitiesController.AddExplanation);
+    // app.put(ROUTE.ACTIVITIES,
+    //     ActivitiesController.AddExplanation);
 
-    app.put(ROUTE.ACTIVITIES_SEEN,
-        ActivitiesController.SetAsSeen)
+    // app.put(ROUTE.ACTIVITIES_SEEN,
+    //     ActivitiesController.SetAsSeen)
 
-    app.delete(ROUTE.ACTIVITIES,
-        ActivitiesController.DeleteActivity);
+    // app.delete(ROUTE.ACTIVITIES,
+    //     ActivitiesController.DeleteActivity);
     //#endregion
 }
