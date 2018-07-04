@@ -11,7 +11,9 @@
   "dependencies": {
     "body-parser": "*",
     "express": "*",
+    "joi": "^13.4.0",
     "mongodb": "^2.2.33",
+    "mongoose": "^5.2.1",
     "nodemon": "*"
   },
   "devDependencies": {
