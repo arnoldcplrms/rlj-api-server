@@ -17,4 +17,5 @@ db.on('error', (err) => {
 module.exports = (app) => {
     require('./routes/AccountsRoute')(app, mongoose, ROUTE);
     require('./routes/ActivitiesRoutes')(app, mongoose, ROUTE);
+    require('./routes/AccountabilitiesRoutes')(app, mongoose, ROUTE);
 }

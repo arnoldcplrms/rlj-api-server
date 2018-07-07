@@ -1,5 +1,5 @@
 const Activities = require('../models/Activities');
-const timeStamp = new Date().toLocaleString();
+const timeStamp = require('../helper/timestamp');
 module.exports = (mongoose) => {
 
     const errorHandler = (error, res) => {
@@ -16,7 +16,7 @@ module.exports = (mongoose) => {
                 }).exec();
                 res.send(result);
             } catch (error) {
-                errorHandler(error, res, 'An error occurred')
+                errorHandler(error, res)
             }
         },
 
@@ -29,11 +29,15 @@ module.exports = (mongoose) => {
                     Activity: body.Activity,
                     IsMobile: body.IsMobile,
                     MacAddress: body.MacAddress,
-                    Explanation: body.Explanation,
                     Seen: false,
+                    Explanation: {
+                        Body: "",
+                        TimeStamp: ""
+                    },
                     SeenBy: {
-                        AccountId: body.SeenBy.AccountId,
-                        TimeStamp: body.SeenBy.TimeStamp
+                        AccountId: "",
+                        FirstName: "",
+                        TimeStamp: ""
                     }
                 })
                 await activity.save();
@@ -67,7 +71,8 @@ module.exports = (mongoose) => {
                 }, {
                     $set: {
                         Explanation: {
-                            Body: body.Explanation
+                            Body: body.Explanation,
+                            TimeStamp: timeStamp(),
                         }
                     }
                 }).exec();
@@ -96,6 +101,7 @@ module.exports = (mongoose) => {
                         Seen: true,
                         SeenBy: {
                             AccountId: body.AccountId,
+                            TimeStamp: timeStamp(),
                             FirstName: body.FirstName
                         }
                     }

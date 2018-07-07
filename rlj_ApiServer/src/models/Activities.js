@@ -1,4 +1,5 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const timeStamp = require('../helper/timestamp')
 const activitiesSchema = new mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     AccountId: {
@@ -11,7 +12,7 @@ const activitiesSchema = new mongoose.Schema({
     },
     TimeStamp: {
         type: String,
-        default: new Date().toLocaleString()
+        default: timeStamp()
     },
     IsMobile: {
         type: Boolean,
@@ -22,26 +23,17 @@ const activitiesSchema = new mongoose.Schema({
         required: true
     },
     Explanation: {
-        Body: {
-            type: String
-        },
-        TimeStamp: {
-            type: Date,
-            default: new Date().toLocaleString()
-        }
+        Body: String,
+        TimeStamp: String
     },
     Seen: {
         type: Boolean,
         required: true
     },
     SeenBy: {
-        AccountId: {
-            type: String,
-        },
-        TimeStamp: {
-            type: Date,
-            default: Date.now
-        }
+        AccountId: String,
+        TimeStamp: String,
+        FirstName: String
     }
 }, {
     collection: 'Activities',
