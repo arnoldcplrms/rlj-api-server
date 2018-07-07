@@ -1,9 +1,9 @@
 const Account = require('../models/Accounts')
 module.exports = (mongoose) => {
-    const errorHandler = (error, res, message) => {
+    const errorHandler = (error, res) => {
         console.log(error);
-        res.status(400).send({
-            message: message
+        res.status(500).json({
+            err: error
         })
     }
     return {
@@ -17,7 +17,7 @@ module.exports = (mongoose) => {
                     MiddleName: body.MiddleName,
                     UserName: body.UserName,
                     Password: body.Password,
-                    BirthDate: new Date(body.BirthDate),
+                    BirthDate: new Date(body.BirthDate).toLocaleDateString(),
                     Email: body.Email,
                     ProfileImage: body.ProfileImage,
                     Address: {
@@ -27,17 +27,12 @@ module.exports = (mongoose) => {
                         City: body.Address.City
                     }
                 })
-
                 await account.save();
-
                 res.send({
                     message: `Inserted succesfully`
                 })
             } catch (error) {
-                console.log(error);
-                res.status(500).json({
-                    err: error
-                })
+                errorHandler(error, res)
             }
         }
     }

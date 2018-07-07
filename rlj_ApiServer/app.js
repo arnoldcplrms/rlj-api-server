@@ -6,7 +6,7 @@ var CONFIG = require('./src/config/config')
 
 app.use(bodyParser.json());
 
-require('./src/routes')(app);
+require('./src/routes_index')(app);
 
 app.listen(CONFIG.PORT, () => {
     console.log(`Listening port ${CONFIG.PORT}`);

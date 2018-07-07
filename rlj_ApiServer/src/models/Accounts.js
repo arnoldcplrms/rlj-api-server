@@ -52,7 +52,8 @@ const accountSchema = new mongoose.Schema({
         }
     }
 }, {
-    collection: 'Accounts'
+    collection: 'Accounts',
+    versionKey: false
 })
 
 module.exports = mongoose.model('Accounts', accountSchema);

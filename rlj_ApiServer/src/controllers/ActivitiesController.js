@@ -1,54 +1,32 @@
-const activities = "Activities"
+const Activities = require('../models/Activities');
 const timeStamp = new Date().toLocaleString();
-module.exports = (mongo, url, objectId) => {
+module.exports = (mongoose) => {
 
-    const errorHandler = (error, res, message) => {
+    const errorHandler = (error, res) => {
         console.log(error);
-        res.status(400).send({
-            message: message
+        res.status(500).json({
+            err: error
         })
     }
-
-    const AccountabilityName = async(id) => {
-        const db = await mongo.connect(url);
-        try {
-            const collection = db.collection(activities);
-            const result = await collection.findOne({
-                "_id": objectId(id)
-            });
-            console.log(result);
-            return result.FirstName;
-        } catch (error) {
-            errorHandler(error, res, 'An error occurred');
-            return;
-        }
-        db.close();
-    }
-
     return {
         async GetActivityLogById(req, res) {
-            const db = await mongo.connect(url);
             try {
-                const collection = db.collection(activities);
-                const result = await collection.find({
-                    "_id": objectId(req.body.id)
-                }).toArray();
+                const result = await Activities.find({
+                    "AccountId": req.body.id
+                }).exec();
                 res.send(result);
             } catch (error) {
                 errorHandler(error, res, 'An error occurred')
             }
-            db.close();
         },
 
         async LogActivity(req, res) {
-            const body = req.body;
-            const db = await mongo.connect(url);
             try {
-                const collection = db.collection(activities);
-                await collection.insertOne({
+                const body = req.body;
+                const activity = new Activities({
+                    _id: new mongoose.Types.ObjectId(),
                     AccountId: body.AccountId,
                     Activity: body.Activity,
-                    TimeStamp: timeStamp,
                     IsMobile: body.IsMobile,
                     MacAddress: body.MacAddress,
                     Explanation: body.Explanation,
@@ -57,83 +35,79 @@ module.exports = (mongo, url, objectId) => {
                         AccountId: body.SeenBy.AccountId,
                         TimeStamp: body.SeenBy.TimeStamp
                     }
-                });
+                })
+                await activity.save();
                 res.send({
                     message: `Inserted succesfully`
-                });
+                })
             } catch (error) {
-                errorHandler(error, res, "An error occured");
+                errorHandler(error, res)
             }
-            db.close();
         },
 
         async DeleteActivity(req, res) {
-            const db = await mongo.connect(url);
             try {
-                const collection = db.collection(activities);
-                await collection.deleteOne({
-                    "_id": objectId(req.body.id)
-                });
+                await Activities.deleteOne({
+                    "_id": new mongoose.Types.ObjectId(req.body.id)
+                }).exec();
+
                 res.send({
                     message: `Deleted succesfully`
                 });
             } catch (error) {
-                errorHandler(error, res, error.message)
+                errorHandler(error, res)
             }
-            db.close();
         },
 
         async AddExplanation(req, res) {
-            const db = await mongo.connect(url);
             const body = req.body;
             try {
-                const collection = db.collection(activities);
-                await collection.update({
-                    "_id": objectId(req.body.id)
+                await Activities.update({
+                    "_id": new mongoose.Types.ObjectId(req.body.id)
                 }, {
                     $set: {
                         Explanation: {
-                            Body: body.Explanation,
-                            TimeStamp: timeStamp
+                            Body: body.Explanation
                         }
                     }
-                })
-                res.send({
-                    message: "Updated Successfully"
-                });
-            } catch (error) {
-                errorHandler(error, res, 'An error occurred')
-            }
+                }).exec();
 
-            db.close();
+                const result = await Activities.findOne({
+                    "_id": new mongoose.Types.ObjectId(req.body.id)
+                }).exec();
+
+                res.send({
+                    message: "Explanation added Successfully",
+                    updatedData: result
+                });
+
+            } catch (error) {
+                errorHandler(error, res)
+            }
         },
 
         async SetAsSeen(req, res) {
-            const db = await mongo.connect(url);
             const body = req.body;
             try {
-                const collection = db.collection(activities);
-                await collection.update({
-                    "_id": objectId(body.id)
+                await Activities.update({
+                    "_id": new mongoose.Types.ObjectId(body.id)
                 }, {
                     $set: {
                         Seen: true,
                         SeenBy: {
                             AccountId: body.AccountId,
-                            FirstName: body.FirstName,
-                            TimeStamp: timeStamp
+                            FirstName: body.FirstName
                         }
                     }
-                })
+                }).exec();
+
                 res.send({
-                    message: "Updated Successfully",
+                    message: "Updated to seen Successfully",
                     body
                 });
             } catch (error) {
-                errorHandler(error, res, 'An error occurred')
+                errorHandler(error, res);
             }
-
-            db.close();
         }
     }
 }
