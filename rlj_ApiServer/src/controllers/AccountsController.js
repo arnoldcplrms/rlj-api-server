@@ -1,6 +1,8 @@
 const Account = require('../models/Accounts');
+
 module.exports = (mongoose) => {
-    const Accountabilities = require('../models/Accountabilities');
+    const AccountabilitiesDAL = require('../data_access/AccountabilitiesDataAccess')(mongoose);
+    const AccountsDAL = require('../data_access/AccountsDataAccess')(mongoose);
 
     const errorHandler = (error, res) => {
         console.log(error);
@@ -9,39 +11,11 @@ module.exports = (mongoose) => {
         })
     }
 
-    const SetAccountabilityCollection = async(id) => {
-        const accountabilities = new Accountabilities({
-            _id: new mongoose.Types.ObjectId(),
-            AccountId: id,
-            Mutual: [],
-            Discipleship: []
-        })
-        await accountabilities.save()
-    }
-
     return {
         async AddAccount(req, res) {
             try {
-                const body = req.body;
-                const account = new Account({
-                    _id: new mongoose.Types.ObjectId(),
-                    FirstName: body.FirstName,
-                    LastName: body.LastName,
-                    MiddleName: body.MiddleName,
-                    UserName: body.UserName,
-                    Password: body.Password,
-                    BirthDate: new Date(body.BirthDate).toLocaleDateString(),
-                    Email: body.Email,
-                    ProfileImage: body.ProfileImage,
-                    Address: {
-                        Country: body.Address.Country,
-                        Street: body.Address.Street,
-                        Town: body.Address.Town,
-                        City: body.Address.City
-                    }
-                });
-                await account.save();
-                await SetAccountabilityCollection(account._id)
+                const account = await AccountsDAL.RegisterAccount(req);
+                await AccountabilitiesDAL.SetAccountabilityCollection(account._id)
                 res.send({
                     message: `Inserted succesfully`
                 })

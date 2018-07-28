@@ -8,14 +8,14 @@ mongoose.connect(config.MONGO_URL, {
 });
 
 db.once('open', () => {
-    console.log("Connected to MongoDB");
+    console.log("Connected to Server");
 });
 db.on('error', (err) => {
     console.log(err);
 });
 
 module.exports = (app) => {
-    require('./routes/AccountsRoute')(app, mongoose, ROUTE);
+    require('./routes/AccountsRoutes')(app, mongoose, ROUTE);
     require('./routes/ActivitiesRoutes')(app, mongoose, ROUTE);
     require('./routes/AccountabilitiesRoutes')(app, mongoose, ROUTE);
 }

@@ -1,4 +1,4 @@
-const timeStamp = () => {
+module.exports = timeStamp = () => {
 	// Create a date object with the current time
 	var now = new Date();
 
@@ -28,4 +28,4 @@ const timeStamp = () => {
 	return date.join("/") + " " + time.join(":") + " " + suffix;
 }
 
-module.exports = timeStamp;
+// module.exports = timeStamp;

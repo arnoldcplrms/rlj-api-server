@@ -1,6 +1,5 @@
-const Activities = require('../models/Activities');
-const timeStamp = require('../helper/timestamp');
 module.exports = (mongoose) => {
+    const ActivitiesDAL = require('../data_access/ActivitiesDataAccess')(mongoose);
 
     const errorHandler = (error, res) => {
         console.log(error);
@@ -9,11 +8,9 @@ module.exports = (mongoose) => {
         })
     }
     return {
-        async GetActivityLogById(req, res) {
+        async GetActivityLogsById(req, res) {
             try {
-                const result = await Activities.find({
-                    "AccountId": req.body.id
-                }).exec();
+                const result = await ActivitiesDAL.GetActivityLogsById(req);
                 res.send(result);
             } catch (error) {
                 errorHandler(error, res)
@@ -22,25 +19,7 @@ module.exports = (mongoose) => {
 
         async LogActivity(req, res) {
             try {
-                const body = req.body;
-                const activity = new Activities({
-                    _id: new mongoose.Types.ObjectId(),
-                    AccountId: body.AccountId,
-                    Activity: body.Activity,
-                    IsMobile: body.IsMobile,
-                    MacAddress: body.MacAddress,
-                    Seen: false,
-                    Explanation: {
-                        Body: "",
-                        TimeStamp: ""
-                    },
-                    SeenBy: {
-                        AccountId: "",
-                        FirstName: "",
-                        TimeStamp: ""
-                    }
-                })
-                await activity.save();
+                await ActivitiesDAL.LogActivity(req);
                 res.send({
                     message: `Inserted succesfully`
                 })
@@ -51,9 +30,7 @@ module.exports = (mongoose) => {
 
         async DeleteActivity(req, res) {
             try {
-                await Activities.deleteOne({
-                    "_id": new mongoose.Types.ObjectId(req.body.id)
-                }).exec();
+                await ActivitiesDAL.DeleteActivity(req);
 
                 res.send({
                     message: `Deleted succesfully`
@@ -64,52 +41,21 @@ module.exports = (mongoose) => {
         },
 
         async AddExplanation(req, res) {
-            const body = req.body;
             try {
-                await Activities.update({
-                    "_id": new mongoose.Types.ObjectId(req.body.id)
-                }, {
-                    $set: {
-                        Explanation: {
-                            Body: body.Explanation,
-                            TimeStamp: timeStamp(),
-                        }
-                    }
-                }).exec();
-
-                const result = await Activities.findOne({
-                    "_id": new mongoose.Types.ObjectId(req.body.id)
-                }).exec();
-
+                await ActivitiesDAL.AddExplanation(req);
                 res.send({
-                    message: "Explanation added Successfully",
-                    updatedData: result
+                    message: "Explanation added Successfully"
                 });
-
             } catch (error) {
                 errorHandler(error, res)
             }
         },
 
         async SetAsSeen(req, res) {
-            const body = req.body;
             try {
-                await Activities.update({
-                    "_id": new mongoose.Types.ObjectId(body.id)
-                }, {
-                    $set: {
-                        Seen: true,
-                        SeenBy: {
-                            AccountId: body.AccountId,
-                            TimeStamp: timeStamp(),
-                            FirstName: body.FirstName
-                        }
-                    }
-                }).exec();
-
+                await ActivitiesDAL.SetAsSeen(req);
                 res.send({
-                    message: "Updated to seen Successfully",
-                    body
+                    message: "Updated to seen Successfully"
                 });
             } catch (error) {
                 errorHandler(error, res);

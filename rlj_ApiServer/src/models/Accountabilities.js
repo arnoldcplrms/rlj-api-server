@@ -2,9 +2,7 @@ const mongoose = require('mongoose');
 const accountabilitiesSchema = new mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     AccountId: String,
-    Mutual: Array,
-    Discipleship: Array
-
+    MonitoredAccounts: Array
 }, {
     collection: 'Accountabilities',
     versionKey: false

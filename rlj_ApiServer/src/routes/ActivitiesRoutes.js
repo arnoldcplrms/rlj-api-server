@@ -2,8 +2,8 @@ module.exports = (app, mongoose, ROUTE) => {
     const ActivitiesController =
         require('../controllers/ActivitiesController')(mongoose)
 
-    app.post(ROUTE.ACTIVITIES_BY_ID,
-        ActivitiesController.GetActivityLogById)
+    app.get(ROUTE.ACTIVITIES_BY_ID,
+        ActivitiesController.GetActivityLogsById)
 
     app.post(ROUTE.ACTIVITIES,
         ActivitiesController.LogActivity);

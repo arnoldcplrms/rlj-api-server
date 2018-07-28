@@ -33,6 +33,10 @@ const accountSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    ContactNumber: {
+        type: String,
+        required: true
+    },
     Address: {
         Country: {
             type: String,

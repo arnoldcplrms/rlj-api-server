@@ -21,19 +21,6 @@ const activitiesSchema = new mongoose.Schema({
     MacAddress: {
         type: String,
         required: true
-    },
-    Explanation: {
-        Body: String,
-        TimeStamp: String
-    },
-    Seen: {
-        type: Boolean,
-        required: true
-    },
-    SeenBy: {
-        AccountId: String,
-        TimeStamp: String,
-        FirstName: String
     }
 }, {
     collection: 'Activities',
