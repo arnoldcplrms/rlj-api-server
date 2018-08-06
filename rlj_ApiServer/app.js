@@ -1,13 +1,12 @@
-var express = require('express');
-var app = express();
-var bodyParser = require('body-parser');
-var CONFIG = require('./src/config/config')
-require('babel-polyfill');
+const express = require('express');
+const app = express();
+const bodyParser = require('body-parser');
+const CONFIG = require('./src/config/config')
 
 app.use(bodyParser.json());
 
-require('./src/routes')(app);
+require('./src/routes_index')(app);
 
 app.listen(CONFIG.PORT, () => {
-    console.log(`Listening port ${CONFIG.PORT}`);
+    console.log(`Listening to port ${CONFIG.PORT}`);
 })

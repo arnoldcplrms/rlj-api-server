@@ -1,42 +1,27 @@
-const accounts = 'Accounts'
-module.exports = (mongo, url, objectId) => {
+const Account = require('../models/Accounts');
 
-    const errorHandler = (error, res, message) => {
+module.exports = (mongoose) => {
+    const AccountabilitiesDAL = require('../data_access/AccountabilitiesDataAccess')(mongoose);
+    const AccountsDAL = require('../data_access/AccountsDataAccess')(mongoose);
+
+    const errorHandler = (error, res) => {
         console.log(error);
-        res.status(400).send({
-            message: message
+        res.status(500).json({
+            err: error
         })
     }
 
     return {
         async AddAccount(req, res) {
-            const body = req.body;
-            const db = await mongo.connect(url);
             try {
-                const collection = db.collection(accounts);
-                await collection.insertOne({
-                    FirstName: body.FirstName,
-                    LastName: body.LastName,
-                    MiddleName: body.MiddleName,
-                    UserName: body.UserName,
-                    Password: body.Password,
-                    BirthDate: body.BirthDate,
-                    Email: body.Email,
-                    ProfileImage: body.ProfileImage,
-                    Address: {
-                        Country: body.Address.Country,
-                        Street: body.Address.Street,
-                        Town: body.Address.Town,
-                        City: body.Address.City
-                    }
-                });
+                const account = await AccountsDAL.RegisterAccount(req);
+                await AccountabilitiesDAL.SetAccountabilityCollection(account._id)
                 res.send({
                     message: `Inserted succesfully`
-                });
+                })
             } catch (error) {
-                errorHandler(error, res, "An error occured");
+                errorHandler(error, res)
             }
-            db.close();
         }
     }
 }
