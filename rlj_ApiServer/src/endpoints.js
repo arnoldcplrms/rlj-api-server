@@ -1,7 +1,7 @@
-const activities = "/api/activities";
-const accounts = "/api/accounts";
-const accountability = "/api/accountabilities";
-const activitiesDetails = '/api/activity_details';
+const activities = "/api/activities",
+    accounts = "/api/accounts",
+    accountability = "/api/accountabilities",
+    activitiesDetails = '/api/activity_details';
 
 module.exports = {
     ACCOUNTS: accounts,

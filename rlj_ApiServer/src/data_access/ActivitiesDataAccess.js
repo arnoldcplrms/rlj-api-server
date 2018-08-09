@@ -18,7 +18,12 @@ module.exports = (mongoose) => {
                 Activity: body.Activity,
                 IsMobile: body.IsMobile,
                 MacAddress: body.MacAddress,
-                Seen: false
+                TimeStamp: timeStamp(),
+                Seen: {
+                    HasSeen: false,
+                    By: "",
+                    TimeStamp: ""
+                }
             });
 
             await activity.save();
@@ -32,32 +37,30 @@ module.exports = (mongoose) => {
 
         async AddExplanation(req) {
             const body = req.body;
-            await Activities.update({
-                "_id": new mongoose.Types.ObjectId(req.body.id)
-            }, {
-                $set: {
-                    Explanation: {
-                        Body: body.Explanation,
-                        TimeStamp: timeStamp(),
+            await Activities.update(
+                { "_id": new mongoose.Types.ObjectId(req.body.id) },
+                {
+                    $push: {
+                        Explanation: body
                     }
                 }
-            }).exec();
+            ).exec();
         },
 
         async SetAsSeen(req) {
             const body = req.body;
-            await Activities.update({
-                "_id": new mongoose.Types.ObjectId(body.id)
-            }, {
-                $set: {
-                    Seen: true,
-                    SeenBy: {
-                        AccountId: body.AccountId,
-                        TimeStamp: timeStamp(),
-                        FirstName: body.FirstName
+            await Activities.update(
+                { "_id": new mongoose.Types.ObjectId(body.id) },
+                {
+                    $set: {
+                        Seen: {
+                            HasSeen: true,
+                            By: body.AccountId,
+                            TimeStamp: timeStamp()
+                        }
                     }
                 }
-            }).exec();
+            ).exec();
         }
     }
 }

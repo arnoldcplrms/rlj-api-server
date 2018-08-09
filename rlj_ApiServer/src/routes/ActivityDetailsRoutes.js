@@ -1,6 +1,6 @@
-module.exports = (app, mongoose, ROUTE) => {
+module.exports = (app, mongoose, ROUTE, errorHandler) => {
     const ActivityDetailsController =
-        require('../controllers/ActivityDetailsController')(mongoose)
+        require('../controllers/ActivityDetailsController')(mongoose, errorHandler)
 
     app.put(ROUTE.ACTIVITY_DETAILS_SEEN,
         ActivityDetailsController.SetAsSeen);

@@ -1,6 +1,6 @@
-module.exports = (app, mongoose, ROUTE) => {
+module.exports = (app, mongoose, ROUTE, errorHandler) => {
     const ActivitiesController =
-        require('../controllers/ActivitiesController')(mongoose)
+        require('../controllers/ActivitiesController')(mongoose, errorHandler)
 
     app.get(ROUTE.ACTIVITIES_BY_ID,
         ActivitiesController.GetActivityLogsById)

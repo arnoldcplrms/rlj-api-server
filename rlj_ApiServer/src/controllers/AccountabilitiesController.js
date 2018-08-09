@@ -1,12 +1,5 @@
-module.exports = (mongoose) => {
+module.exports = (mongoose, errorHandler) => {
     const AccountabilitiesDAL = require('../data_access/AccountabilitiesDataAccess')(mongoose);
-
-    const errorHandler = (error, res) => {
-        console.log(error);
-        res.status(500).json({
-            err: error
-        })
-    }
 
     return {
         async AddAccountability(req, res) {

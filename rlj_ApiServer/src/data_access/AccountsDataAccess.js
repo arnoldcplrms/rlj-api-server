@@ -10,7 +10,7 @@ module.exports = (mongoose) => {
                 MiddleName: body.MiddleName,
                 UserName: body.UserName,
                 Password: body.Password,
-                BirthDate: new Date(body.BirthDate).toLocaleDateString(),
+                BirthDate: new Date(body.BirthDate).toDateString(),
                 Email: body.Email,
                 ProfileImage: body.ProfileImage,
                 ContactNumber: body.ContactNumber,
@@ -22,8 +22,6 @@ module.exports = (mongoose) => {
                 }
             });
             await account.save();
-
-            return account;
         }
     }
 }

@@ -11,13 +11,14 @@ module.exports = (mongoose) => {
         },
         async AddAccountability(req) {
             const data = req.body;
-            await Accountabilites.update({
-                "_id": new mongoose.Types.ObjectId(data.id)
-            }, {
-                $push: {
-                    MonitoredAccounts: data.Id
+            await Accountabilites.update(
+                { "_id": new mongoose.Types.ObjectId(data.id) },
+                {
+                    $push: {
+                        MonitoredAccounts: data.Id
+                    }
                 }
-            }).exec();
+            ).exec();
         }
     }
 }

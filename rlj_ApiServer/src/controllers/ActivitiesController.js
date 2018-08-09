@@ -1,12 +1,7 @@
-module.exports = (mongoose) => {
-    const ActivitiesDAL = require('../data_access/ActivitiesDataAccess')(mongoose);
+module.exports = (mongoose, errorHandler) => {
+    const ActivitiesDAL =
+        require('../data_access/ActivitiesDataAccess')(mongoose);
 
-    const errorHandler = (error, res) => {
-        console.log(error);
-        res.status(500).json({
-            err: error
-        })
-    }
     return {
         async GetActivityLogsById(req, res) {
             try {
@@ -31,7 +26,6 @@ module.exports = (mongoose) => {
         async DeleteActivity(req, res) {
             try {
                 await ActivitiesDAL.DeleteActivity(req);
-
                 res.send({
                     message: `Deleted succesfully`
                 });
@@ -47,7 +41,7 @@ module.exports = (mongoose) => {
                     message: "Explanation added Successfully"
                 });
             } catch (error) {
-                errorHandler(error, res)
+                errorHandler(error, res);
             }
         },
 

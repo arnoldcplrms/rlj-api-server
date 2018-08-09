@@ -6,14 +6,14 @@ const activityDetails = new mongoose.Schema({
         AccountId: String,
         TimeStamp: String
     },
-    Explanation: String,
-    Seen: {
-        type: Boolean,
-        default: false
-    }
+    Explanation: String
+    // Seen: {
+    //     type: Boolean,
+    //     default: false
+    // }
 }, {
-    collection: 'ActivityDetails',
-    versionKey: false
-})
+        collection: 'ActivityDetails',
+        versionKey: false
+    })
 
 module.exports = mongoose.model('ActivityDetails', activityDetails);

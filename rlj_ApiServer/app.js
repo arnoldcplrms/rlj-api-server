@@ -1,7 +1,7 @@
-const express = require('express');
-const app = express();
-const bodyParser = require('body-parser');
-const CONFIG = require('./src/config/config')
+const express = require('express'),
+    app = express(),
+    bodyParser = require('body-parser'),
+    CONFIG = require('./src/config/config')
 
 app.use(bodyParser.json());
 
