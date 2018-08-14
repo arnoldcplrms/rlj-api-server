@@ -22,6 +22,13 @@ module.exports = (mongoose) => {
                 }
             });
             await account.save();
+        },
+        async RetrieveAccount(req) {
+            const result = await Account.findOne({
+                "_id": mongoose.Types.ObjectId(req.params.id)
+            }).exec();
+
+            return result;
         }
     }
 }

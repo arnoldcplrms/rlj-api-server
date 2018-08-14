@@ -8,7 +8,15 @@ module.exports = (mongoose, errorHandler) => {
                 await AccountsDAL.RegisterAccount(req);
                 res.send({
                     message: `Inserted succesfully`
-                })
+                });
+            } catch (error) {
+                errorHandler(error, res);
+            }
+        },
+        async RetrieveAccount(req, res) {
+            try {
+                const result = await AccountsDAL.RetrieveAccount(req);
+                res.send(result);
             } catch (error) {
                 errorHandler(error, res);
             }

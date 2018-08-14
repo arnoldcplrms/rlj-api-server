@@ -23,7 +23,8 @@ module.exports = (mongoose) => {
                     HasSeen: false,
                     By: "",
                     TimeStamp: ""
-                }
+                },
+                Explanation: []
             });
 
             await activity.save();
@@ -36,12 +37,11 @@ module.exports = (mongoose) => {
         },
 
         async AddExplanation(req) {
-            const body = req.body;
             await Activities.update(
-                { "_id": new mongoose.Types.ObjectId(req.body.id) },
+                { "_id": new mongoose.Types.ObjectId(req.id) },
                 {
                     $push: {
-                        Explanation: body
+                        Explanation: req
                     }
                 }
             ).exec();

@@ -5,6 +5,7 @@ const activities = "/api/activities",
 
 module.exports = {
     ACCOUNTS: accounts,
+    ACCOUNTS_BY_ID: `${accounts}/:id`,
     LOGIN: `${accounts}/login`,
 
     ACTIVITIES: activities,
@@ -14,5 +15,7 @@ module.exports = {
     ACTIVITY_DETAILS_SEEN: `${activitiesDetails}/seen`,
     ACTIVITY_DETAILS_EXP: `${activitiesDetails}/explain`,
 
-    ACCOUNTABILITIES: accountability
+    ACCOUNTABILITIES: accountability,
+    ACCTBLREQ: `${accountability}/request`,
+    ACCTBLREQ_BY_ID: `${accountability}/:id`
 }

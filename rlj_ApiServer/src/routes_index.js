@@ -6,6 +6,7 @@ const config = require('./config/config'),
 
 const AccountsRoutes = require('./routes/AccountsRoutes'),
     ActivitiesRoutes = require('./routes/ActivitiesRoutes'),
+    AcctblRequest = require('./routes/AccountabilityRequest'),
     AccountabilitiesRoutes = require('./routes/AccountabilitiesRoutes');
 
 mongoose.connect(config.MONGO_URL, {
@@ -25,4 +26,5 @@ module.exports = (app) => {
     AccountsRoutes(app, mongoose, ROUTE, errorHandler);
     ActivitiesRoutes(app, mongoose, ROUTE, errorHandler);
     AccountabilitiesRoutes(app, mongoose, ROUTE, errorHandler);
+    AcctblRequest(app, mongoose, ROUTE, errorHandler);
 }

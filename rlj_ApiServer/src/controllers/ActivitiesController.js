@@ -1,3 +1,4 @@
+const timeStamp = require('../helper/timestamp');
 module.exports = (mongoose, errorHandler) => {
     const ActivitiesDAL =
         require('../data_access/ActivitiesDataAccess')(mongoose);
@@ -36,7 +37,13 @@ module.exports = (mongoose, errorHandler) => {
 
         async AddExplanation(req, res) {
             try {
-                await ActivitiesDAL.AddExplanation(req);
+                let body = req.body;
+                await ActivitiesDAL.AddExplanation({
+                    id: body.id,
+                    explanation: body.explanation,
+                    timeStamp: timeStamp()
+                });
+
                 res.send({
                     message: "Explanation added Successfully"
                 });
