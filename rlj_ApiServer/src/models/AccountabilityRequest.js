@@ -9,6 +9,9 @@ const accountabilityRequest = new mongoose.Schema(
         RequestorId: {
             type: String,
             required: true
+        },
+        RequestDate: {
+            type: String
         }
     },
     {

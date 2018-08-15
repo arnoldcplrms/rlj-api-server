@@ -26,12 +26,19 @@ module.exports = (mongoose, errorHandler) => {
                 const result = await AcctblRequest.RetrieveRequest(req);
                 res.send(result);
             } catch (error) {
-
+                errorHandler(error, res);
             }
         },
 
-        async RemoveRequest() {
-
+        async DeleteRequest(req, res) {
+            try {
+                await AcctblRequest.DeleteRequest(req);
+                res.send({
+                    message: "Request deleted sucessfully."
+                })
+            } catch (error) {
+                errorHandler(error, res)
+            }
         }
     }
 }

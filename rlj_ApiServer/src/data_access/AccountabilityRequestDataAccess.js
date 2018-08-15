@@ -1,5 +1,6 @@
 const AccountabilityRequest = require('../models/AccountabilityRequest');
 const Accounts = require('../models/Accounts');
+const timeStamp = require('../helper/timestamp');
 module.exports = (mongoose) => {
 
     return {
@@ -8,7 +9,8 @@ module.exports = (mongoose) => {
             const acctblRequest = new AccountabilityRequest({
                 _id: new mongoose.Types.ObjectId(),
                 AccountId: data.AccountId,
-                RequestorId: data.RequestorId
+                RequestorId: data.RequestorId,
+                RequestDate: timeStamp()
             });
             await acctblRequest.save();
         },
@@ -35,13 +37,20 @@ module.exports = (mongoose) => {
                     _id: mongoose.Types.ObjectId(request[i].RequestorId)
                 }).exec();
                 result.push({
+                    Object_Id: request[i]._id,
                     FullName: `${accRes.FirstName} ${accRes.LastName}`,
                     Email: accRes.Email,
                     ProfileImage: accRes.ProfileImage,
-                    AccountId: accRes._id
+                    AccountId: accRes._id,
+                    RequestDate: request[i].RequestDate
                 });
             }
             return result;
+        },
+        async DeleteRequest(req) {
+            await AccountabilityRequest.deleteOne({
+                "_id": mongoose.Types.ObjectId(req.params.id)
+            }).exec();
         }
     }
 }

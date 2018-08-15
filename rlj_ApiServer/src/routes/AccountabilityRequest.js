@@ -7,4 +7,7 @@ module.exports = (app, mongoose, ROUTE, errorHandler) => {
 
     app.get(ROUTE.ACCTBLREQ_BY_ID,
         AcctblRequestController.RetrieveRequest)
+
+    app.delete(ROUTE.ACCTBLREQ_BY_ID,
+        AcctblRequestController.DeleteRequest)
 }
