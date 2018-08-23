@@ -1,10 +1,10 @@
-module.exports = (app, mongoose, ROUTE, errorHandler) => {
+module.exports = (router, mongoose, ROUTE, errorHandler) => {
     const AccountsController =
         require('../controllers/AccountsController')(mongoose, errorHandler)
 
-    app.post(ROUTE.ACCOUNTS,
+    router.post(ROUTE.ACCOUNTS,
         AccountsController.AddAccount)
 
-    app.get(ROUTE.ACCOUNTS_BY_ID,
+    router.get(ROUTE.ACCOUNTS_BY_ID,
         AccountsController.RetrieveAccount)
 }

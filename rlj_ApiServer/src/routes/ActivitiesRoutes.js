@@ -1,20 +1,23 @@
-module.exports = (app, mongoose, ROUTE, errorHandler) => {
+module.exports = (router, mongoose, ROUTE, errorHandler) => {
     const ActivitiesController =
         require('../controllers/ActivitiesController')(mongoose, errorHandler)
 
-    app.get(ROUTE.ACTIVITIES_BY_ID,
-        ActivitiesController.GetActivityLogsById)
+    router.get(ROUTE.ACTIVITIES_BY_ID,
+        ActivitiesController.GetActivityLogsById);
 
-    app.post(ROUTE.ACTIVITIES,
+    router.post(ROUTE.ACTIVITIES,
         ActivitiesController.LogActivity);
 
-    app.put(ROUTE.ACTIVITIES,
+    router.put(ROUTE.ACTIVITIES,
         ActivitiesController.AddExplanation);
 
-    app.put(ROUTE.ACTIVITIES_SEEN,
-        ActivitiesController.SetAsSeen)
+    router.put(ROUTE.ACTIVITIES_SEEN,
+        ActivitiesController.SetAsSeen);
 
-    app.delete(ROUTE.ACTIVITIES,
+    router.delete(ROUTE.ACTIVITIES,
         ActivitiesController.DeleteActivity);
+
+    router.get(ROUTE.ACTIVITIES_COUNT,
+        ActivitiesController.GetMonitoredAccountsActivityCount)
 
 }

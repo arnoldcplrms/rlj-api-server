@@ -7,6 +7,7 @@ const express = require('express'),
 
 app.use(bodyParser.json());
 app.use(router);
+
 require('./src/routes_index')(router);
 
 app.listen(CONFIG.PORT, () => {

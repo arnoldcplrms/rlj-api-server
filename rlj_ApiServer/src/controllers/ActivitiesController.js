@@ -37,7 +37,7 @@ module.exports = (mongoose, errorHandler) => {
 
         async AddExplanation(req, res) {
             try {
-                let body = req.body;
+                const body = req.body;
                 await ActivitiesDAL.AddExplanation({
                     id: body.id,
                     explanation: body.explanation,
@@ -58,6 +58,15 @@ module.exports = (mongoose, errorHandler) => {
                 res.send({
                     message: "Updated to seen Successfully"
                 });
+            } catch (error) {
+                errorHandler(error, res);
+            }
+        },
+
+        async GetMonitoredAccountsActivityCount(req, res) {
+            try {
+                const result = await ActivitiesDAL.GetTotalActivityCount(req);
+                res.send(result);
             } catch (error) {
                 errorHandler(error, res);
             }

@@ -11,6 +11,7 @@ module.exports = {
     ACTIVITIES: activities,
     ACTIVITIES_BY_ID: `${activities}/:id`,
     ACTIVITIES_SEEN: `${activities}/seen`,
+    ACTIVITIES_COUNT: `${activities}/:id/count`,
 
     ACTIVITY_DETAILS_SEEN: `${activitiesDetails}/seen`,
     ACTIVITY_DETAILS_EXP: `${activitiesDetails}/explain`,

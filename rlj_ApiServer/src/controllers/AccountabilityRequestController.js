@@ -6,7 +6,7 @@ module.exports = (mongoose, errorHandler) => {
         async NewAccountabilityRequest(req, res) {
             try {
                 const existingRecord = await AcctblRequest.FindExistingRequest(req)
-                if (existingRecord.length === 0) {
+                if (existingRecord === 0) {
                     await AcctblRequest.NewAccountabilityRequest(req);
                     res.send({
                         message: 'Request sent sucessfully.'

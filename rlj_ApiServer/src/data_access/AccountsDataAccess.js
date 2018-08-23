@@ -3,7 +3,7 @@ module.exports = (mongoose) => {
     return {
         async RegisterAccount(req) {
             const body = req.body;
-            const account = new Account({
+            await new Account({
                 _id: new mongoose.Types.ObjectId(),
                 FirstName: body.FirstName,
                 LastName: body.LastName,
@@ -20,15 +20,12 @@ module.exports = (mongoose) => {
                     Town: body.Address.Town,
                     City: body.Address.City
                 }
-            });
-            await account.save();
+            }).save();
         },
         async RetrieveAccount(req) {
-            const result = await Account.findOne({
+            return await Account.findOne({
                 "_id": mongoose.Types.ObjectId(req.params.id)
             }).exec();
-
-            return result;
         }
     }
 }

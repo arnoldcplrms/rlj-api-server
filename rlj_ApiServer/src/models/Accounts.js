@@ -55,6 +55,10 @@ const accountSchema = new mongoose.Schema(
                 type: String,
                 required: true
             }
+        },
+        MonitoredAccounts: {
+            type: Array,
+            default: []
         }
     },
     {

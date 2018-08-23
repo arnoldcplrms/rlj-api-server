@@ -3,7 +3,7 @@ const activitiesSchema = new mongoose.Schema(
     {
         _id: mongoose.Schema.Types.ObjectId,
         AccountId: {
-            type: String,
+            type: mongoose.Schema.Types.ObjectId,
             required: true
         },
         Activity: {
@@ -27,14 +27,17 @@ const activitiesSchema = new mongoose.Schema(
                 default: false
             },
             By: {
-                type: String
+                type: String,
+                default: ""
             },
             TimeStamp: {
-                type: String
+                type: String,
+                default: ""
             }
         },
         Explanation: {
-            type: Array
+            type: Array,
+            default: []
         }
     },
     {
