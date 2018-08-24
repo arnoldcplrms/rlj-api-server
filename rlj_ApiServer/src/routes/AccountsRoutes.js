@@ -7,4 +7,7 @@ module.exports = (router, mongoose, ROUTE, errorHandler) => {
 
     router.get(ROUTE.ACCOUNTS_BY_ID,
         AccountsController.RetrieveAccount)
+
+    router.post(ROUTE.LOGIN,
+        AccountsController.Login)
 }

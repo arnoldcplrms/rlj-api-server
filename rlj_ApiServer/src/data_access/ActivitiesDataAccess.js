@@ -11,7 +11,7 @@ module.exports = (mongoose) => {
 
         async LogActivity(req) {
             const body = req.body;
-            return await new Activities({
+            await new Activities({
                 _id: new mongoose.Types.ObjectId(),
                 AccountId: mongoose.Types.ObjectId(body.AccountId),
                 Activity: body.Activity,

@@ -1,4 +1,5 @@
 const Account = require('../models/Accounts');
+const bcrypt = require('../helper/PasswordEncryption');
 module.exports = (mongoose) => {
     return {
         async RegisterAccount(req) {
@@ -26,6 +27,19 @@ module.exports = (mongoose) => {
             return await Account.findOne({
                 "_id": mongoose.Types.ObjectId(req.params.id)
             }).exec();
+        },
+        async IsLoginAuthorized(req) {
+            let res = false;
+            const data = req.body;
+            const account = await Account.findOne({
+                UserName: data.UserName
+            }).exec();
+
+            (account &&
+                await bcrypt.ComparePassword(data.Password, account.Password)) ?
+                res = true : res = false;
+
+            return res;
         }
     }
 }
