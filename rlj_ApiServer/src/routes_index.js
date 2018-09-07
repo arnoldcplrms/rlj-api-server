@@ -2,7 +2,8 @@ const config = require('./config/config'),
     mongoose = require('mongoose'),
     ROUTE = require('./endpoints'),
     errorHandler = require('./helper/ErrorHandler'),
-    db = mongoose.connection;
+    db = mongoose.connection,
+    jwt = require('./helper/AuthenticationHelper')
 
 const AccountsRoutes = require('./routes/AccountsRoutes'),
     ActivitiesRoutes = require('./routes/ActivitiesRoutes'),
@@ -23,7 +24,7 @@ db.on('error', (err) => {
 });
 
 module.exports = (router) => {
-    AccountsRoutes(router, mongoose, ROUTE, errorHandler);
+    AccountsRoutes(router, mongoose, ROUTE, errorHandler, jwt);
     ActivitiesRoutes(router, mongoose, ROUTE, errorHandler);
     AccountabilitiesRoutes(router, mongoose, ROUTE, errorHandler);
     AcctblRequest(router, mongoose, ROUTE, errorHandler);

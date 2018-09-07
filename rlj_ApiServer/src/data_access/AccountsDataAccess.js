@@ -29,17 +29,36 @@ module.exports = (mongoose) => {
             }).exec();
         },
         async IsLoginAuthorized(req) {
-            let res = false;
-            const data = req.body;
+            let res;
+            let dataObject = {};
+            let data = req.body;
             const account = await Account.findOne({
                 UserName: data.UserName
             }).exec();
 
             (account &&
                 await bcrypt.ComparePassword(data.Password, account.Password)) ?
-                res = true : res = false;
+            res = true: res = false;
 
-            return res;
+            res ? dataObject = {
+                isAuthorized: res,
+                _id: account._id,
+                userName: account.UserName,
+                email: account.Email
+            } : dataObject = {
+                isAuthorized: res
+            }
+
+            return dataObject;
+        },
+        async IsUsernameExisting(req) {
+            let res;
+            const account = await Account.findOne({
+                UserName: req.body.UserName
+            }).exec();
+
+            account ? res = true : res = false;
+            return res
         }
     }
 }

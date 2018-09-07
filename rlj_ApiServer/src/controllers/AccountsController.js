@@ -1,4 +1,4 @@
-module.exports = (mongoose, errorHandler) => {
+module.exports = (mongoose, errorHandler, jwt) => {
     const AccountsDAL = require('../data_access/AccountsDataAccess')(mongoose);
     const bcrypt = require('../helper/PasswordEncryption');
     return {
@@ -24,8 +24,9 @@ module.exports = (mongoose, errorHandler) => {
         },
         async Login(req, res) {
             try {
-                await AccountsDAL.IsLoginAuthorized(req) ?
-                    res.status(200).send("Welcome user.") :
+                const login = await AccountsDAL.IsLoginAuthorized(req)
+                login.isAuthorized ?
+                    await loginHandler(login, res, jwt) :
                     res.status(400).send({
                         message: 'Invalid username or password.'
                     });
@@ -34,4 +35,14 @@ module.exports = (mongoose, errorHandler) => {
             }
         }
     }
+}
+const loginHandler = async (data, res, jwt) => {
+    let token = await jwt.Sign({
+        _id: data._id,
+        userName: data.userName,
+        email: data.email
+    });
+    res.status(200).send({
+        token
+    });
 }
