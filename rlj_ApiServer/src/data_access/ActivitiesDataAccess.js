@@ -1,27 +1,24 @@
 const Activities = require('../models/Activities');
+const Accounts = require('../models/Accounts');
 const timeStamp = require('../helper/timestamp');
 module.exports = (mongoose) => {
     return {
         async GetActivityLogsById(req) {
-            const result = await Activities.find({
+            return await Activities.find({
                 "AccountId": req.params.id
             }).exec();
-
-            return result;
         },
 
         async LogActivity(req) {
             const body = req.body;
-            const activity = new Activities({
+            await new Activities({
                 _id: new mongoose.Types.ObjectId(),
-                AccountId: body.AccountId,
+                AccountId: mongoose.Types.ObjectId(body.AccountId),
                 Activity: body.Activity,
                 IsMobile: body.IsMobile,
                 MacAddress: body.MacAddress,
-                Seen: false
-            });
-
-            await activity.save();
+                TimeStamp: timeStamp()
+            }).save();
         },
 
         async DeleteActivity(req) {
@@ -31,33 +28,68 @@ module.exports = (mongoose) => {
         },
 
         async AddExplanation(req) {
-            const body = req.body;
-            await Activities.update({
-                "_id": new mongoose.Types.ObjectId(req.body.id)
-            }, {
-                $set: {
-                    Explanation: {
-                        Body: body.Explanation,
-                        TimeStamp: timeStamp(),
+            await Activities.update(
+                { "_id": new mongoose.Types.ObjectId(req.id) },
+                {
+                    $push: {
+                        Explanation: req
                     }
                 }
-            }).exec();
+            ).exec();
         },
 
+        //updates the activity as seen by the accountable
         async SetAsSeen(req) {
             const body = req.body;
-            await Activities.update({
-                "_id": new mongoose.Types.ObjectId(body.id)
-            }, {
-                $set: {
-                    Seen: true,
-                    SeenBy: {
-                        AccountId: body.AccountId,
-                        TimeStamp: timeStamp(),
-                        FirstName: body.FirstName
+            await Activities.update(
+                { "_id": new mongoose.Types.ObjectId(body.id) },
+                {
+                    $set: {
+                        Seen: {
+                            HasSeen: true,
+                            By: body.AccountId,
+                            TimeStamp: timeStamp()
+                        }
                     }
                 }
+            ).exec();
+        },
+
+        //gets the total suspicious activity 
+        //detected from the monitored accounts
+        async GetTotalActivityCount(req) {
+            const result = [];
+            const account = await Accounts.findOne({
+                _id: mongoose.Types.ObjectId(req.params.id)
             }).exec();
+
+            const monAccs = account.MonitoredAccounts;
+            for (let i = 0, len = monAccs.length; i < len; i++) {
+                const profile = await Accounts.aggregate(
+                    [
+                        {
+                            $match: {
+                                _id: mongoose.Types.ObjectId(monAccs[i])
+                            }
+                        },
+                        {
+                            $lookup: {
+                                from: "Activities",
+                                localField: "_id",
+                                foreignField: "AccountId",
+                                as: "activities"
+                            }
+                        },
+                    ]
+                ).exec();
+
+                result.push({
+                    FullName: `${profile[i].FirstName} ${profile[i].LastName}`,
+                    AccountId: monAccs[i],
+                    ActivityCount: profile[i].activities.length
+                });
+            }
+            return result;
         }
     }
 }

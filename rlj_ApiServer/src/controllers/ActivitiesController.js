@@ -1,12 +1,8 @@
-module.exports = (mongoose) => {
-    const ActivitiesDAL = require('../data_access/ActivitiesDataAccess')(mongoose);
+const timeStamp = require('../helper/timestamp');
+module.exports = (mongoose, errorHandler) => {
+    const ActivitiesDAL =
+        require('../data_access/ActivitiesDataAccess')(mongoose);
 
-    const errorHandler = (error, res) => {
-        console.log(error);
-        res.status(500).json({
-            err: error
-        })
-    }
     return {
         async GetActivityLogsById(req, res) {
             try {
@@ -31,7 +27,6 @@ module.exports = (mongoose) => {
         async DeleteActivity(req, res) {
             try {
                 await ActivitiesDAL.DeleteActivity(req);
-
                 res.send({
                     message: `Deleted succesfully`
                 });
@@ -42,12 +37,18 @@ module.exports = (mongoose) => {
 
         async AddExplanation(req, res) {
             try {
-                await ActivitiesDAL.AddExplanation(req);
+                const body = req.body;
+                await ActivitiesDAL.AddExplanation({
+                    id: body.id,
+                    explanation: body.explanation,
+                    timeStamp: timeStamp()
+                });
+
                 res.send({
                     message: "Explanation added Successfully"
                 });
             } catch (error) {
-                errorHandler(error, res)
+                errorHandler(error, res);
             }
         },
 
@@ -57,6 +58,15 @@ module.exports = (mongoose) => {
                 res.send({
                     message: "Updated to seen Successfully"
                 });
+            } catch (error) {
+                errorHandler(error, res);
+            }
+        },
+
+        async GetMonitoredAccountsActivityCount(req, res) {
+            try {
+                const result = await ActivitiesDAL.GetTotalActivityCount(req);
+                res.send(result);
             } catch (error) {
                 errorHandler(error, res);
             }

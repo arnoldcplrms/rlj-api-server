@@ -1,13 +1,6 @@
-module.exports = (mongoose) => {
+module.exports = (mongoose, errorHandler) => {
     const ActivityDetailsDAL =
         require('../data_access/ActivityDetailsDataAccess')(mongoose);
-
-    const errorHandler = (error, res) => {
-        console.log(error);
-        res.status(500).json({
-            err: error
-        })
-    }
 
     return {
         async AddExplanation(req, res) {
