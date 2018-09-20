@@ -16,9 +16,7 @@ mongoose.connect(config.MONGO_URL, {
 
 db.once('open', () => {
     console.log("Connected to Server");
-});
-
-db.on('error', (err) => {
+}).on('error', (err) => {
     console.log("CONNECTION FAILED!");
     console.log(err);
 });
