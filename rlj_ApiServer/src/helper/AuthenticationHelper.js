@@ -7,7 +7,7 @@ module.exports = {
     },
     VerifyToken(req, res, next) {
         typeof bearerHeader !== 'undefined' ?
-            tokeHandler(req.headers['authorization'], res, next) :
+            tokenHandler(req.headers['authorization'], res, next) :
             res.status(403).send();
     },
     VerifyAuth(token, res) {
@@ -20,7 +20,7 @@ module.exports = {
     }
 }
 
-let tokeHandler = (bearer, res, next) => {
+let tokenHandler = (bearer, res, next) => {
     let bearerToken = bearer.split(' ');
     res.token = bearerToken[1]
     next();
