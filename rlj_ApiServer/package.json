@@ -11,6 +11,7 @@
   "dependencies": {
     "bcrypt": "^3.0.0",
     "body-parser": "*",
+    "cors": "^2.8.4",
     "express": "*",
     "joi": "^13.4.0",
     "jsonwebtoken": "^8.3.0",
