@@ -1,10 +1,20 @@
+const loginHandler = async (data, res, jwt) => {
+    let token = await jwt.Sign({
+        _id: data._id,
+        userName: data.userName,
+        email: data.email
+    });
+    res.status(200).send({
+        token
+    });
+}
 module.exports = (mongoose, errorHandler, jwt) => {
     const AccountsDAL = require('../data_access/AccountsDataAccess')(mongoose);
-    const bcrypt = require('../helper/PasswordEncryption');
+    const { HashPassword } = require('../helper/PasswordEncryption');
     return {
         async AddAccount(req, res) {
             try {
-                let password = await bcrypt.HashPassword(req.body.Password);
+                let password = await HashPassword(req.body.Password);
                 req.body.Password = password;
                 await AccountsDAL.RegisterAccount(req);
                 res.send({
@@ -35,14 +45,4 @@ module.exports = (mongoose, errorHandler, jwt) => {
             }
         }
     }
-}
-const loginHandler = async (data, res, jwt) => {
-    let token = await jwt.Sign({
-        _id: data._id,
-        userName: data.userName,
-        email: data.email
-    });
-    res.status(200).send({
-        token
-    });
 }

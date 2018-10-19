@@ -6,9 +6,10 @@ module.exports = {
         return await jwt.sign(payload, secretKey);
     },
     VerifyToken(req, res, next) {
+        const bearerHeader = req.headers['authorization'];
         typeof bearerHeader !== 'undefined' ?
-            tokenHandler(req.headers['authorization'], res, next) :
-            res.status(403).send();
+            tokenHandler(bearerHeader, res, next) :
+            res.status(403).send("Invalid token");
     },
     VerifyAuth(token, res) {
         try {

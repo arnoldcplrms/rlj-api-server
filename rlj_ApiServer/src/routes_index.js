@@ -23,7 +23,7 @@ db.once('open', () => {
 
 module.exports = (router) => {
     AccountsRoutes(router, mongoose, ROUTE, errorHandler, jwt);
-    ActivitiesRoutes(router, mongoose, ROUTE, errorHandler);
+    ActivitiesRoutes(router, mongoose, ROUTE, errorHandler, jwt);
     AccountabilitiesRoutes(router, mongoose, ROUTE, errorHandler);
     AcctblRequest(router, mongoose, ROUTE, errorHandler);
 }

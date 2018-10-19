@@ -6,7 +6,7 @@ module.exports = {
         let salt = await bcrypt.genSalt(saltRounds);
         return await bcrypt.hash(data, salt);
     },
-    async ComparePassword(data, encryptedString) {
-        return await bcrypt.compare(data, encryptedString);
+    async ComparePassword(password, encryptedString) {
+        return await bcrypt.compare(password, encryptedString);
     }
 };

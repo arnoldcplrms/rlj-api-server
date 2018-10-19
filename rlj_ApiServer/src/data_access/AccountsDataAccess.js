@@ -1,5 +1,5 @@
 const Account = require('../models/Accounts');
-const bcrypt = require('../helper/PasswordEncryption');
+const { ComparePassword } = require('../helper/PasswordEncryption');
 module.exports = (mongoose) => {
     return {
         async RegisterAccount(req) {
@@ -37,8 +37,8 @@ module.exports = (mongoose) => {
             }).exec();
 
             (account &&
-                await bcrypt.ComparePassword(data.Password, account.Password)) ?
-            res = true: res = false;
+                await ComparePassword(data.Password, account.Password)) ?
+                res = true : res = false;
 
             res ? dataObject = {
                 isAuthorized: res,
