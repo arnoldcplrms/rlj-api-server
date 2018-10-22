@@ -1,30 +1,30 @@
-module.exports = (router, mongoose, ROUTE, errorHandler, { VerifyToken }) => {
+module.exports = (router, mongoose, ROUTE, errorHandler, { VerifyAuth }) => {
     const ActivitiesController =
         require('../controllers/ActivitiesController')(mongoose, errorHandler)
 
     router
         .get(ROUTE.ACTIVITIES_BY_ID,
-            VerifyToken,
+            VerifyAuth,
             ActivitiesController.GetActivityLogsById)
 
         .post(ROUTE.ACTIVITIES,
-            VerifyToken,
+            VerifyAuth,
             ActivitiesController.LogActivity)
 
         .put(ROUTE.ACTIVITIES,
-            VerifyToken,
+            VerifyAuth,
             ActivitiesController.AddExplanation)
 
         .put(ROUTE.ACTIVITIES_SEEN,
-            VerifyToken,
+            VerifyAuth,
             ActivitiesController.SetAsSeen)
 
         .delete(ROUTE.ACTIVITIES,
-            VerifyToken,
+            VerifyAuth,
             ActivitiesController.DeleteActivity)
 
         .get(ROUTE.ACTIVITIES_COUNT,
-            VerifyToken,
+            VerifyAuth,
             ActivitiesController.GetMonitoredAccountsActivityCount)
 
 }

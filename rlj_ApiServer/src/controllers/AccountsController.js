@@ -1,4 +1,4 @@
-const loginHandler = async (data, res, jwt) => {
+const loginHandler = async (data, req, res, jwt) => {
     let token = await jwt.Sign({
         _id: data._id,
         userName: data.userName,
@@ -36,7 +36,7 @@ module.exports = (mongoose, errorHandler, jwt) => {
             try {
                 const login = await AccountsDAL.IsLoginAuthorized(req)
                 login.isAuthorized ?
-                    await loginHandler(login, res, jwt) :
+                    await loginHandler(login, req, res, jwt) :
                     res.status(400).send({
                         message: 'Invalid username or password.'
                     });
