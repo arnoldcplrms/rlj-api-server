@@ -1,10 +1,10 @@
-const Account = require('../models/Accounts');
-const { ComparePassword } = require('../helper/PasswordEncryption');
+const { Accounts, comparePassword, hashPassword } = require('../models/Accounts');
 module.exports = (mongoose) => {
     return {
         async RegisterAccount(req) {
+            req.body.Password = await hashPassword(req.body.Password);
             const body = req.body;
-            await new Account({
+            await new Accounts({
                 _id: new mongoose.Types.ObjectId(),
                 FirstName: body.FirstName,
                 LastName: body.LastName,
@@ -13,7 +13,6 @@ module.exports = (mongoose) => {
                 Password: body.Password,
                 BirthDate: new Date(body.BirthDate).toDateString(),
                 Email: body.Email,
-                ProfileImage: body.ProfileImage,
                 ContactNumber: body.ContactNumber,
                 Address: {
                     Country: body.Address.Country,
@@ -24,7 +23,7 @@ module.exports = (mongoose) => {
             }).save();
         },
         async RetrieveAccount(req) {
-            return await Account.findOne({
+            return await Accounts.findOne({
                 "_id": mongoose.Types.ObjectId(req.params.id)
             }).exec();
         },
@@ -32,12 +31,12 @@ module.exports = (mongoose) => {
             let res;
             let dataObject = {};
             let data = req.body;
-            const account = await Account.findOne({
+            const account = await Accounts.findOne({
                 UserName: data.UserName
             }).exec();
 
             (account &&
-                await ComparePassword(data.Password, account.Password)) ?
+                await comparePassword(data.Password, account.Password)) ?
                 res = true : res = false;
 
             res ? dataObject = {
@@ -50,15 +49,6 @@ module.exports = (mongoose) => {
             }
 
             return dataObject;
-        },
-        async IsUsernameExisting(req) {
-            let res;
-            const account = await Account.findOne({
-                UserName: req.body.UserName
-            }).exec();
-
-            account ? res = true : res = false;
-            return res
         }
     }
 }

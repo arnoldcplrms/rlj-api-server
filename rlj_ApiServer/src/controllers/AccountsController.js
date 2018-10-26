@@ -1,21 +1,22 @@
-const loginHandler = async (data, req, res, jwt) => {
-    let token = await jwt.Sign({
+const jwt = require("jsonwebtoken")
+const { JWT_SECRET } = require('../config/config')
+
+const loginHandler = async (data, res) => {
+    let token = await jwt.sign({
         _id: data._id,
         userName: data.userName,
         email: data.email
-    });
+    }, JWT_SECRET);
+
     res.status(200).send({
         token
     });
 }
-module.exports = (mongoose, errorHandler, jwt) => {
+module.exports = (mongoose, errorHandler) => {
     const AccountsDAL = require('../data_access/AccountsDataAccess')(mongoose);
-    const { HashPassword } = require('../helper/PasswordEncryption');
     return {
         async AddAccount(req, res) {
             try {
-                let password = await HashPassword(req.body.Password);
-                req.body.Password = password;
                 await AccountsDAL.RegisterAccount(req);
                 res.send({
                     message: `Inserted succesfully`
@@ -36,8 +37,8 @@ module.exports = (mongoose, errorHandler, jwt) => {
             try {
                 const login = await AccountsDAL.IsLoginAuthorized(req)
                 login.isAuthorized ?
-                    await loginHandler(login, req, res, jwt) :
-                    res.status(400).send({
+                    await loginHandler(login, res) :
+                    res.status(401).send({
                         message: 'Invalid username or password.'
                     });
             } catch (error) {

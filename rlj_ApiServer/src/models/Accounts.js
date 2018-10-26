@@ -1,4 +1,7 @@
-const mongoose = require('mongoose')
+const bcrypt = require('bcrypt'),
+    saltRounds = 10,
+    mongoose = require('mongoose')
+
 const accountSchema = new mongoose.Schema(
     {
         _id: mongoose.Schema.Types.ObjectId,
@@ -32,7 +35,7 @@ const accountSchema = new mongoose.Schema(
         },
         ProfileImage: {
             type: String,
-            required: true
+            default: null
         },
         ContactNumber: {
             type: String,
@@ -67,4 +70,36 @@ const accountSchema = new mongoose.Schema(
     }
 )
 
-module.exports = mongoose.model('Accounts', accountSchema);
+const Accounts = mongoose.model('Accounts', accountSchema);
+
+exports.hashPassword = async (data) => {
+    let salt = await bcrypt.genSalt(saltRounds);
+    return await bcrypt.hash(data, salt);
+}
+
+exports.comparePassword = async (password, encryptedString) => {
+    return await bcrypt.compare(password, encryptedString);
+}
+
+exports.isUserNameExists = async (req, res) => {
+    let result;
+    const accounts = await Accounts.findOne({
+        UserName: req.body.UserName
+    }).exec();
+    accounts ? result = true : result = false;
+
+    return result
+}
+
+exports.isEmailExist = async (req, res) => {
+    let result = true;
+    const accounts = await Accounts.findOne({
+        Email: req.body.Email
+    }).exec();
+
+    accounts ? result = true : result = false;
+
+    return result
+}
+
+exports.Accounts = Accounts;
