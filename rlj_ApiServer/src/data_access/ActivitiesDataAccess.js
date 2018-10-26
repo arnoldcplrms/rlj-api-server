@@ -62,8 +62,8 @@ module.exports = (mongoose) => {
             const account = await Accounts.findOne({
                 _id: mongoose.Types.ObjectId(req.params.id)
             }).exec();
-
             const monAccs = account.MonitoredAccounts;
+
             for (let i = 0, len = monAccs.length; i < len; i++) {
                 const profile = await Accounts.aggregate(
                     [
@@ -83,12 +83,13 @@ module.exports = (mongoose) => {
                     ]
                 ).exec();
 
-                result.push({
-                    FullName: `${profile[i].FirstName} ${profile[i].LastName}`,
+                result.unshift({
+                    FullName: `${profile[0].FirstName} ${profile[0].LastName}`,
                     AccountId: monAccs[i],
-                    ActivityCount: profile[i].activities.length
+                    ActivityCount: profile[0].activities.length
                 });
             }
+
             return result;
         }
     }

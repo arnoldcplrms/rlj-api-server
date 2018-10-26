@@ -5,23 +5,15 @@ module.exports = {
     async Sign(payload) {
         return await jwt.sign(payload, secretKey);
     },
-    VerifyToken(req, res, next) {
-        typeof bearerHeader !== 'undefined' ?
-            tokenHandler(req.headers['authorization'], res, next) :
-            res.status(403).send();
-    },
-    VerifyAuth(token, res) {
+    VerifyAuth(req, res, next) {
+        const token = req.header("x-auth-token")
+        if (!token) return res.status(401).send("Access denied. No token provided")
         try {
-            return jwt.verify(token, secretKey);
+            req.user = jwt.verify(token, secretKey);
+            next();
         } catch (error) {
-            res.status(403).send();
+            res.status(400).send('Invalid token.');
             console.log(error);
         }
     }
-}
-
-let tokenHandler = (bearer, res, next) => {
-    let bearerToken = bearer.split(' ');
-    res.token = bearerToken[1]
-    next();
 }
