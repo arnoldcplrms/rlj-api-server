@@ -2,13 +2,7 @@ const config = require('./config/config'),
     mongoose = require('mongoose'),
     ROUTE = require('./endpoints'),
     errorHandler = require('./helper/ErrorHandler'),
-    db = mongoose.connection,
-    verifyAuth = require('./middlewares/jwt_verify_auth')
-
-const AccountsRoutes = require('./routes/AccountsRoutes'),
-    ActivitiesRoutes = require('./routes/ActivitiesRoutes'),
-    AcctblRequest = require('./routes/AccountabilityRequestRoutes'),
-    AccountabilitiesRoutes = require('./routes/AccountabilitiesRoutes');
+    db = mongoose.connection
 
 mongoose.connect(config.MONGO_URL, {
     useNewUrlParser: true
@@ -21,9 +15,9 @@ db.once('open', () => {
     console.log(err);
 });
 
-module.exports = (router) => {
-    AccountsRoutes(router, mongoose, ROUTE, errorHandler);
-    ActivitiesRoutes(router, mongoose, ROUTE, errorHandler, verifyAuth);
-    AccountabilitiesRoutes(router, mongoose, ROUTE, errorHandler);
-    AcctblRequest(router, mongoose, ROUTE, errorHandler);
+module.exports = router => {
+    require('./routes/AccountsRoutes')(router);
+    require('./routes/ActivitiesRoutes')(router);
+    require('./routes/AccountabilitiesRoutes')(router);
+    require('./routes/AccountabilityRequestRoutes')(router, mongoose, ROUTE, errorHandler);
 }

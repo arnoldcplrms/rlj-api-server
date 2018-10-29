@@ -1,20 +1,19 @@
 const verifyAuth = require('../middlewares/jwt_verify_auth'),
-    accountsValidation = require('../middlewares/AccountsValidation')
+    accountsValidation = require('../middlewares/AccountsValidation'),
+    { ACCOUNTS, LOGIN, ACCOUNTS_BY_ID } = require('../endpoints'),
+    accountsController = require('../controllers/AccountsController')
 
-module.exports = (router, mongoose, ROUTE, errorHandler) => {
-    const accountsController =
-        require('../controllers/AccountsController')(mongoose, errorHandler)
+module.exports = router => {
 
     router
-        .post(ROUTE.ACCOUNTS,
+        .post(ACCOUNTS,
             accountsValidation,
             accountsController.AddAccount)
 
-        .post(ROUTE.LOGIN,
+        .post(LOGIN,
             accountsController.Login)
 
-        .get(ROUTE.ACCOUNTS_BY_ID,
+        .get(ACCOUNTS_BY_ID,
             verifyAuth,
             accountsController.RetrieveAccount)
-
 }

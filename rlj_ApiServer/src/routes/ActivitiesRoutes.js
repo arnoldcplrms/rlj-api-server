@@ -1,7 +1,8 @@
-module.exports = (router, mongoose, ROUTE, errorHandler, verifyAuth) => {
-    const ActivitiesController =
-        require('../controllers/ActivitiesController')(mongoose, errorHandler)
+const verifyAuth = require('../middlewares/jwt_verify_auth'),
+    ActivitiesController = require('../controllers/ActivitiesController'),
+    ROUTE = require('../endpoints')
 
+module.exports = router => {
     router
         .get(ROUTE.ACTIVITIES_BY_ID,
             verifyAuth,

@@ -1,7 +1,7 @@
-module.exports = (router, mongoose, ROUTE, errorHandler) => {
-    const AccountabilitiesController =
-        require('../controllers/AccountabilitiesController')(mongoose, errorHandler)
+const AccountabilitiesController = require('../controllers/AccountabilitiesController'),
+    { ACCOUNTABILITIES } = require('../endpoints')
 
-    router.put(ROUTE.ACCOUNTABILITIES,
+module.exports = router => {
+    router.put(ACCOUNTABILITIES,
         AccountabilitiesController.AddAccountability)
 }
