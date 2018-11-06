@@ -1,21 +1,16 @@
-const { MONGO_URL } = require('./config/config'),
-    mongoose = require('mongoose'),
-    db = mongoose.connection
+module.exports = app => {
+    app.use('/api/activities',
+        require('./routes/ActivitiesRoutes'))
 
-mongoose.connect(MONGO_URL, {
-    useNewUrlParser: true
-});
+    .use('/api/accounts',
+        require('./routes/AccountsRoutes'))
 
-db.once('open', () => {
-    console.log("Connected to Server");
-}).on('error', (err) => {
-    console.log("CONNECTION FAILED!");
-    console.log(err);
-});
+    .use('/api/accountabilities/request',
+        require('./routes/AccountabilityRequestRoutes'))
 
-module.exports = router => {
-    require('./routes/AccountsRoutes')(router);
-    require('./routes/ActivitiesRoutes')(router);
-    require('./routes/AccountabilitiesRoutes')(router);
-    require('./routes/AccountabilityRequestRoutes')(router);
+    .use('/api/accountabilities',
+        require('./routes/AccountabilitiesRoutes'))
+
+    .use('/api/activity_details',
+        require('./routes/ActivityDetailsRoutes'))
 }

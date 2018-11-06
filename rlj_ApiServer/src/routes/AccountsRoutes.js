@@ -1,19 +1,18 @@
 const verifyAuth = require('../middlewares/jwt_verify_auth'),
     accountsValidation = require('../middlewares/AccountsValidation'),
-    { ACCOUNTS, LOGIN, ACCOUNTS_BY_ID } = require('../endpoints'),
-    accountsController = require('../controllers/AccountsController')
+    accountsController = require('../controllers/AccountsController'),
+    router = require('express').Router()
 
-module.exports = router => {
 
-    router
-        .post(ACCOUNTS,
-            accountsValidation,
-            accountsController.AddAccount)
+router.post('/',
+    accountsValidation,
+    accountsController.AddAccount)
 
-    .post(LOGIN,
-        accountsController.Login)
+.post('/login',
+    accountsController.Login)
 
-    .get(ACCOUNTS_BY_ID,
-        verifyAuth,
-        accountsController.RetrieveAccount)
-}
+.get('/:id',
+    verifyAuth,
+    accountsController.RetrieveAccount)
+
+module.exports = router;

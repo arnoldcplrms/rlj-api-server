@@ -3,12 +3,14 @@ const jwt = require("jsonwebtoken"),
     errorHandler = require('../helper/ErrorHandler'),
     AccountsDAL = require('../data_access/AccountsDataAccess'),
 
-    loginHandler = async (data, res) => {
+    loginHandler = async(data, res) => {
         let token = await jwt.sign({
             _id: data._id,
             userName: data.userName,
             email: data.email
-        }, JWT_SECRET);
+        }, JWT_SECRET, {
+            expiresIn: 30
+        });
 
         res.status(200).send(token);
     }

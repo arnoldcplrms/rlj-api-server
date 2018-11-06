@@ -1,10 +1,13 @@
 const express = require('express'),
     app = express(),
-    router = express.Router(),
     bodyParser = require('body-parser'),
     { PORT } = require('./src/config/config'),
-    cors = require('cors')
-// PAMUL = require('./src/helper/ProcessAndMemoryUsageLogger');
+    cors = require('cors'),
+    router = express.Router(),
+    // PAMUL = require('./src/helper/ProcessAndMemoryUsageLogger');
+    { MONGO_URL } = require('./src/config/config'),
+    mongoose = require('mongoose'),
+    db = mongoose.connection
 
 app.use([
     cors(),
@@ -14,4 +17,15 @@ app.use([
     console.log(`Listening to port ${PORT}`);
 })
 
-require('./src/routes_index')(router);
+mongoose.connect(MONGO_URL, {
+    useNewUrlParser: true
+});
+
+db.once('open', () => {
+    console.log("Connected to Server");
+}).on('error', (err) => {
+    console.log("CONNECTION FAILED!");
+    console.log(err);
+});
+
+require('./src/routes_index')(app);

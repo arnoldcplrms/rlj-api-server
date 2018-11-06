@@ -1,14 +1,18 @@
-const AcctblRequestController = require('../controllers/AccountabilityRequestController'),
-    { ACCTBLREQ, ACCTBLREQ_BY_ID } = require('../endpoints')
+const AcctblReqController = require('../controllers/AccountabilityRequestController'),
+    router = require('express').Router(),
+    verifyAuth = require('../middlewares/jwt_verify_auth')
 
-module.exports = router => {
-    router
-        .post(ACCTBLREQ,
-            AcctblRequestController.NewAccountabilityRequest)
+router.post('/',
+    verifyAuth,
+    AcctblReqController.NewAccountabilityRequest)
 
-        .get(ACCTBLREQ_BY_ID,
-            AcctblRequestController.RetrieveRequest)
+.get('/:id',
+    verifyAuth,
+    AcctblReqController.RetrieveRequest)
 
-        .delete(ACCTBLREQ_BY_ID,
-            AcctblRequestController.DeleteRequest)
-}
+.delete('/:id',
+    verifyAuth,
+    AcctblReqController.DeleteRequest)
+
+
+module.exports = router
