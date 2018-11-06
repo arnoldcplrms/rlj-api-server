@@ -1,14 +1,14 @@
-module.exports = (router, mongoose, ROUTE, errorHandler) => {
-    const AcctblRequestController =
-        require('../controllers/AccountabilityRequestController')(mongoose, errorHandler)
+const AcctblRequestController = require('../controllers/AccountabilityRequestController'),
+    { ACCTBLREQ, ACCTBLREQ_BY_ID } = require('../endpoints')
 
+module.exports = router => {
     router
-        .post(ROUTE.ACCTBLREQ,
+        .post(ACCTBLREQ,
             AcctblRequestController.NewAccountabilityRequest)
 
-        .get(ROUTE.ACCTBLREQ_BY_ID,
+        .get(ACCTBLREQ_BY_ID,
             AcctblRequestController.RetrieveRequest)
 
-        .delete(ROUTE.ACCTBLREQ_BY_ID,
+        .delete(ACCTBLREQ_BY_ID,
             AcctblRequestController.DeleteRequest)
 }

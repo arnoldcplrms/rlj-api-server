@@ -9,7 +9,7 @@ module.exports = (req, res, next) => {
         req.user = jwt.verify(token, JWT_SECRET);
         next();
     } catch (error) {
-        res.status(401).send('Invalid token.');
         errorHandler(error, res);
+        res.status(401).send('Invalid token.');
     }
 }

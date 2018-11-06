@@ -10,10 +10,10 @@ module.exports = router => {
             accountsValidation,
             accountsController.AddAccount)
 
-        .post(LOGIN,
-            accountsController.Login)
+    .post(LOGIN,
+        accountsController.Login)
 
-        .get(ACCOUNTS_BY_ID,
-            verifyAuth,
-            accountsController.RetrieveAccount)
+    .get(ACCOUNTS_BY_ID,
+        verifyAuth,
+        accountsController.RetrieveAccount)
 }
