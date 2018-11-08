@@ -81,7 +81,7 @@ exports.comparePassword = async (password, encryptedString) => {
     return await bcrypt.compare(password, encryptedString);
 }
 
-exports.isUserNameExists = async (req, res) => {
+exports.isUserNameExists = async (req) => {
     let result;
     const accounts = await Accounts.findOne({
         UserName: req.body.UserName
@@ -91,7 +91,7 @@ exports.isUserNameExists = async (req, res) => {
     return result
 }
 
-exports.isEmailExist = async (req, res) => {
+exports.isEmailExists = async (req) => {
     let result = true;
     const accounts = await Accounts.findOne({
         Email: req.body.Email

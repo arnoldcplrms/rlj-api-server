@@ -1,12 +1,13 @@
-module.exports = (router, mongoose, ROUTE, errorHandler) => {
-    const ActivityDetailsController =
-        require('../controllers/ActivityDetailsController')(mongoose, errorHandler)
+const verifyAuth = require('../middlewares/jwt_verify_auth'),
+    ActivityDetailsController = require('../controllers/ActivityDetailsController'),
+    router = require('express').Router()
 
-    router
-        .put(ROUTE.ACTIVITY_DETAILS_SEEN,
-            ActivityDetailsController.SetAsSeen)
+router.put('/seen',
+    verifyAuth,
+    ActivityDetailsController.SetAsSeen)
 
-        .put(ROUTE.ACTIVITY_DETAILS_EXP,
-            ActivityDetailsController.AddExplanation)
+.put('/explain',
+    verifyAuth,
+    ActivityDetailsController.AddExplanation)
 
-}
+module.exports = router

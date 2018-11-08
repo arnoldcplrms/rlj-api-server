@@ -1,29 +1,16 @@
-const config = require('./config/config'),
-    mongoose = require('mongoose'),
-    ROUTE = require('./endpoints'),
-    errorHandler = require('./helper/ErrorHandler'),
-    db = mongoose.connection,
-    verifyAuth = require('./middlewares/jwt_verify_auth')
+module.exports = app => {
+    app.use('/api/activities',
+        require('./routes/ActivitiesRoutes'))
 
-const AccountsRoutes = require('./routes/AccountsRoutes'),
-    ActivitiesRoutes = require('./routes/ActivitiesRoutes'),
-    AcctblRequest = require('./routes/AccountabilityRequestRoutes'),
-    AccountabilitiesRoutes = require('./routes/AccountabilitiesRoutes');
+    .use('/api/accounts',
+        require('./routes/AccountsRoutes'))
 
-mongoose.connect(config.MONGO_URL, {
-    useNewUrlParser: true
-});
+    .use('/api/accountabilities/request',
+        require('./routes/AccountabilityRequestRoutes'))
 
-db.once('open', () => {
-    console.log("Connected to Server");
-}).on('error', (err) => {
-    console.log("CONNECTION FAILED!");
-    console.log(err);
-});
+    .use('/api/accountabilities',
+        require('./routes/AccountabilitiesRoutes'))
 
-module.exports = (router) => {
-    AccountsRoutes(router, mongoose, ROUTE, errorHandler);
-    ActivitiesRoutes(router, mongoose, ROUTE, errorHandler, verifyAuth);
-    AccountabilitiesRoutes(router, mongoose, ROUTE, errorHandler);
-    AcctblRequest(router, mongoose, ROUTE, errorHandler);
+    .use('/api/activity_details',
+        require('./routes/ActivityDetailsRoutes'))
 }

@@ -1,14 +1,18 @@
-module.exports = (router, mongoose, ROUTE, errorHandler) => {
-    const AcctblRequestController =
-        require('../controllers/AccountabilityRequestController')(mongoose, errorHandler)
+const AcctblReqController = require('../controllers/AccountabilityRequestController'),
+    router = require('express').Router(),
+    verifyAuth = require('../middlewares/jwt_verify_auth')
 
-    router
-        .post(ROUTE.ACCTBLREQ,
-            AcctblRequestController.NewAccountabilityRequest)
+router.post('/',
+    verifyAuth,
+    AcctblReqController.NewAccountabilityRequest)
 
-        .get(ROUTE.ACCTBLREQ_BY_ID,
-            AcctblRequestController.RetrieveRequest)
+.get('/:id',
+    verifyAuth,
+    AcctblReqController.RetrieveRequest)
 
-        .delete(ROUTE.ACCTBLREQ_BY_ID,
-            AcctblRequestController.DeleteRequest)
-}
+.delete('/:id',
+    verifyAuth,
+    AcctblReqController.DeleteRequest)
+
+
+module.exports = router

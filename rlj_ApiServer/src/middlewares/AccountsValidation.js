@@ -1,4 +1,4 @@
-const { isEmailExist, isUserNameExists } = require('../models/Accounts');
+const { isEmailExists, isUserNameExists } = require('../models/Accounts');
 const Joi = require("joi");
 const errorHandler = require('../helper/ErrorHandler')
 
@@ -21,8 +21,8 @@ module.exports = async (req, res, next) => {
             }
         });
         const result = Joi.validate(req.body, accountSchema),
-            doesEmailExist = await isEmailExist(req, res),
-            doesUserNameExist = await isUserNameExists(req, res)
+            doesEmailExist = await isEmailExists(req),
+            doesUserNameExist = await isUserNameExists(req)
 
         if (!result.error && !doesEmailExist && !doesUserNameExist) {
             next()

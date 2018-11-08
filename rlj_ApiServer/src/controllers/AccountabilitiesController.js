@@ -1,19 +1,18 @@
-module.exports = (mongoose, errorHandler) => {
-    const AccountabilitiesDAL = require('../data_access/AccountabilitiesDataAccess')(mongoose);
+const AccountabilitiesDAL = require('../data_access/AccountabilitiesDataAccess'),
+    errorHandler = require('../helper/ErrorHandler')
 
-    return {
-        async AddAccountability(req, res) {
-            try {
-                await AccountabilitiesDAL.AddAccountability(req);
-                res.send({
-                    message: 'Accountabilities added.'
-                })
-            } catch (error) {
-                errorHandler(error, res);
-            }
-        },
-        async RemoveAccountabilty() {
-
+module.exports = {
+    async AddAccountability(req, res) {
+        try {
+            await AccountabilitiesDAL.AddAccountability(req);
+            res.send({
+                message: 'Accountabilities added.'
+            })
+        } catch (error) {
+            errorHandler(error, res);
         }
+    },
+    async RemoveAccountabilty() {
+
     }
 }
