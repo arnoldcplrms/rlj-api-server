@@ -9,10 +9,10 @@ const jwt = require("jsonwebtoken"),
             userName: data.userName,
             email: data.email
         }, JWT_SECRET, {
-            expiresIn: 30
+            expiresIn: "7d"
         });
 
-        res.status(200).send(token);
+        res.send(token);
     }
 module.exports = {
     async AddAccount(req, res) {
