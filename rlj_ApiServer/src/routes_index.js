@@ -1,16 +1,22 @@
+const ActivitiesRoutes = require('./routes/ActivitiesRoutes'),
+    AccountsRoutes = require('./routes/AccountsRoutes'),
+    AccountabilityRequestRoutes = require('./routes/AccountabilityRequestRoutes'),
+    AccountabilitiesRoutes = require('./routes/AccountabilitiesRoutes'),
+    ActivityDetailsRoutes = require('./routes/ActivityDetailsRoutes')
+
 module.exports = app => {
     app.use('/api/activities',
-        require('./routes/ActivitiesRoutes'))
+        ActivitiesRoutes)
 
     .use('/api/accounts',
-        require('./routes/AccountsRoutes'))
+        AccountsRoutes)
 
-    .use('/api/accountabilities/request',
-        require('./routes/AccountabilityRequestRoutes'))
+    .use('/api/accountabilities-request',
+        AccountabilityRequestRoutes)
 
     .use('/api/accountabilities',
-        require('./routes/AccountabilitiesRoutes'))
+        AccountabilitiesRoutes)
 
     .use('/api/activity_details',
-        require('./routes/ActivityDetailsRoutes'))
+        ActivityDetailsRoutes)
 }

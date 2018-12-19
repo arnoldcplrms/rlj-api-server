@@ -2,7 +2,7 @@ const { isEmailExists, isUserNameExists } = require('../models/Accounts');
 const Joi = require("joi");
 const errorHandler = require('../helper/ErrorHandler')
 
-module.exports = async (req, res, next) => {
+module.exports = async(req, res, next) => {
     try {
         const accountSchema = Joi.object().keys({
             FirstName: Joi.string().required(),
@@ -24,15 +24,14 @@ module.exports = async (req, res, next) => {
             doesEmailExist = await isEmailExists(req),
             doesUserNameExist = await isUserNameExists(req)
 
-        if (!result.error && !doesEmailExist && !doesUserNameExist) {
-            next()
-        } else {
+        !result.error && !doesEmailExist && !doesUserNameExist ?
+            next() :
             res.status(400).send({
                 error: result.error ? result : null,
                 doesEmailExist,
                 doesUserNameExist
             });
-        }
+
     } catch (error) {
         errorHandler(error, res)
     }

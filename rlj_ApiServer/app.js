@@ -1,8 +1,7 @@
 const app = require('express')(),
     bodyParser = require('body-parser'),
-    { PORT } = require('./src/config/config'),
+    { PORT, MONGO_URL } = require('./src/config/config'),
     cors = require('cors'),
-    { MONGO_URL } = require('./src/config/config'),
     mongoose = require('mongoose'),
     db = mongoose.connection
 
